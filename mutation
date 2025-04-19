@@ -1,0 +1,277 @@
+cloneFactSheet(
+id: ID!
+patches: [Patch]
+cloningOptions: CloningOptionsType
+rev: Long
+validateOnly: Boolean = false
+): FactSheetCloneResult
+Clone a Fact Sheet
+
+createFactSheet(
+input: BaseFactSheetInput!
+patches: [Patch]
+validateOnly: Boolean = false
+): FactSheetMutationResult
+Create a Fact Sheet
+
+updateFactSheet(
+id: ID!
+rev: Long
+patches: [Patch]!
+comment: String
+validateOnly: Boolean = false
+): FactSheetMutationResult
+Allows to update Fact Sheet data
+
+updateFactSheetExternal(
+externalIdPath: ID!
+patches: [Patch]!
+comment: String
+validateOnly: Boolean = false
+): FactSheetMutationResult
+Allows to update Fact Sheet data using an external ID
+
+copyRelations(
+factSheetId: ID!
+sourceFactSheetId: ID!
+relationType: String!
+validateOnly: Boolean = false
+): BaseFactSheet
+Copy all relations of a given name from one Fact Sheet to another
+
+createRelationConstraint(
+factSheetId: ID!
+constrainedRelationType: String!
+constrainedRelationTargetFactSheetId: ID!
+constrainingRelationType: String!
+constrainingRelationTargetFactSheetId: ID!
+validateOnly: Boolean = false
+): BaseFactSheet
+Adds a relation constraint by creating the constrained and constraining relations, if missing
+
+deleteRelation(
+from: FactSheetIdentifierType!
+to: FactSheetIdentifierType!
+type: RelationName!
+validateOnly: Boolean = false
+): DeleteRelationResponse
+Deletes a relation between two Fact Sheets. If the type of the relation is "-to-one", the mutation will also
+delete a relation that targets a different to Fact Sheet.
+
+deleteRelationConstraint(
+factSheetId: ID!
+constrainedRelationType: String!
+constrainedRelationTargetFactSheetId: ID!
+constrainingRelationType: String!
+constrainingRelationTargetFactSheetId: ID!
+validateOnly: Boolean = false
+): BaseFactSheet
+Removes a relation constraint, deleting the necessary relations
+
+moveRelations(
+factSheetId: ID!
+sourceFactSheetId: ID!
+relationType: String!
+validateOnly: Boolean = false
+): BaseFactSheet
+Move all relations of a given name from one Fact Sheet to another
+
+upsertRelation(
+from: FactSheetIdentifierType!
+to: FactSheetIdentifierType!
+type: RelationName!
+patches: [Patch!]
+validateOnly: Boolean = false
+): UpsertRelationResponse
+Creates or updates a relation between two Fact Sheets. In case of a to-many relation
+(many-to-many, one-to-many), a relation is uniquely identified by two Fact Sheet identifiers ('from' and 'to')
+and the relation type (relToParent, relToRequiredBy, ...). In case of a to-one relation (many-to-one, one-to-one),
+a relation is already uniquely identified by the 'from' identifier and the relation type. In that case, the relation
+is seen as a property of the 'from' Fact Sheet that can be updated. This would result in a switch of the relation target.
+
+createTagGroup(
+name: String!
+shortName: String
+description: String
+mode: TagGroupModeEnum!
+mandatory: Boolean = false
+restrictToFactSheetTypes: [FactSheetType!]
+mandatoryForFactSheetTypes: [FactSheetType!]
+validateOnly: Boolean
+): TagGroup
+Creates a tag group in the storage.
+
+deleteTagGroup(
+id: ID!
+validateOnly: Boolean
+): TagGroup
+Deletes a tag group from the storage if it does not contain any tag.
+It returns null once the deletion is successful.
+
+updateTagGroup(
+id: ID!
+patches: [Patch]!
+validateOnly: Boolean
+): TagGroup
+Updates a tag group.
+
+upsertTagGroup(
+name: String!
+shortName: String
+description: String
+mode: TagGroupModeEnum
+mandatory: Boolean = false
+restrictToFactSheetTypes: [FactSheetType!]
+mandatoryForFactSheetTypes: [FactSheetType!]
+validateOnly: Boolean
+): TagGroup
+Upserts a tag group.
+
+createTag(
+name: String!
+description: String
+color: String
+tagGroupId: ID
+validateOnly: Boolean
+): Tag
+Creates a tag in the storage.
+
+deleteTag(
+id: ID!
+validateOnly: Boolean
+): Tag
+Deletes a tag from the storage if it is not assigned to any Fact Sheet.
+It returns null once the deletion is successful.
+
+updateTag(
+id: ID!
+patches: [Patch]!
+validateOnly: Boolean
+): Tag
+Updates a tag
+
+upsertTag(
+name: String!
+tagGroupName: String
+description: String
+color: String
+validateOnly: Boolean
+): Tag
+Upserts a tag
+
+createDocument(
+factSheetId: ID!
+factSheetRev: Long
+name: String!
+description: String
+documentType: String
+metadata: String
+url: String
+origin: String
+refId: String
+validateOnly: Boolean = false
+): Document
+Adds a document to the storage. To upload a file to the graphQL endpoint, please use the multipart endpoint
+to be able to send the binary file data including with graphQL
+'s query and variables.
+
+deleteDocument(
+id: ID!
+factSheetRev: Long
+validateOnly: Boolean = false
+): Document
+Deletes a document. It returns null once the deletion is successful.
+
+updateDocument(
+id: ID!
+factSheetRev: Long
+patches: [Patch]!
+validateOnly: Boolean = false
+): Document
+Updates fields or content of a document. When the binary content should be updated, one Patch object with path 'file'
+needs to be applied to specify a file name and triggering the replacement of binary content.
+
+createComment(
+factSheetId: ID!
+message: String!
+status: CommentStatus!
+validateOnly: Boolean = false
+): Comment
+Adds a comment to a Fact Sheet.
+
+createReply(
+commentId: ID
+message: String
+newCommentStatus: CommentStatus
+validateOnly: Boolean = false
+): Reply
+Adds a reply to a comment
+
+deleteComment(
+commentId: ID
+validateOnly: Boolean = false
+): Boolean
+Deletes a comment from a Fact Sheet
+
+createSubscription(
+factSheetId: ID!
+factSheetRev: Long
+user: UserInput!
+type: FactSheetSubscriptionType!
+roleIds: [ID]
+roles: [SubscriptionToSubscriptionRoleLinkInput]
+validateOnly: Boolean = false
+): Subscription
+Adds a subscription to a Fact Sheet.
+
+createSubscriptionRole(
+name: String!
+description: String
+type: FactSheetSubscriptionType
+allowedFactSheetTypes: [FactSheetType!]
+mandatoryForFactSheetTypes: [FactSheetType!]
+validateOnly: Boolean
+): SubscriptionRole
+Adds a subscription role.
+
+deleteSubscription(
+id: ID!
+factSheetRev: Long
+validateOnly: Boolean
+): BaseFactSheet
+Deletes a subscription
+
+deleteSubscriptionRole(
+id: ID!
+validateOnly: Boolean
+): SubscriptionRole
+Deletes a subscription role.
+
+deleteSubscriptions(
+factSheetId: ID!
+factSheetRev: Long
+validateOnly: Boolean
+): BaseFactSheet
+Deletes all subscriptions of current user from a Fact Sheet
+
+updateSubscription(
+id: ID!
+factSheetRev: Long
+user: UserInput!
+type: FactSheetSubscriptionType!
+roleIds: [ID]
+roles: [SubscriptionToSubscriptionRoleLinkInput]
+validateOnly: Boolean
+): Subscription
+Updates fields of a subscription
+
+updateSubscriptionRole(
+id: ID!
+name: String!
+description: String
+type: FactSheetSubscriptionType
+allowedFactSheetTypes: [FactSheetType!]
+mandatoryForFactSheetTypes: [FactSheetType!]
+validateOnly: Boolean
+): SubscriptionRole
+Updates a subscription role.
