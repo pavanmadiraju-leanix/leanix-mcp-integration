@@ -73,6 +73,32 @@ This integration provides five MCP tools for LeanIX operations:
 
 4. **Environment Variables**: Make sure to properly load and validate environment variables before making any API calls.
 
+## Claude Desktop Configuration
+
+To use this MCP server with Claude Desktop, you need to add the server configuration to Claude's config file. The config file is typically located at:
+- Mac: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
+
+Add the following configuration:
+
+```json
+{
+    "mcpServers": {
+      "myserver": {
+        "command": "node",
+        "args": [
+          "/path/to/your/lean/server.js"
+        ]
+      }
+    }
+}
+```
+
+Replace `/path/to/your/lean/server.js` with the absolute path to your server.js file. This tells Claude Desktop to:
+1. Start this MCP server when needed
+2. Connect to it for LeanIX operations
+3. Run it using Node.js
+
 ## Testing Your Integration
 
 1. Start the server:
