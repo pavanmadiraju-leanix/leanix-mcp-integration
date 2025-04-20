@@ -99,7 +99,7 @@ This feature makes it easier to explore and query your LeanIX data without needi
 
 ## Claude Desktop Configuration
 
-To use this MCP server with Claude Desktop, you need to add the server configuration to Claude's config file. The config file is typically located at:
+To use this MCP server with Claude Desktop, you need to add the server configurations to Claude's config file. The config file is typically located at:
 - Mac: `~/Library/Application Support/Claude/claude_desktop_config.json`
 - Windows: `%APPDATA%\Claude\claude_desktop_config.json`
 
@@ -113,12 +113,23 @@ Add the following configuration:
         "args": [
           "/path/to/your/lean/server.js"
         ]
+      },
+      "webresearch": {
+        "command": "npx",
+        "args": ["-y", "@mzxrai/mcp-webresearch@latest"]
       }
     }
 }
 ```
 
-Replace `/path/to/your/lean/server.js` with the absolute path to your server.js file.
+This configuration enables:
+1. **LeanIX Integration**: Replace `/path/to/your/lean/server.js` with the absolute path to your server.js file
+2. **Web Research**: Provides supplementary research capabilities for LeanIX-related queries
+
+The integration now supports:
+- Direct LeanIX data operations through the primary server
+- Web research for supplementary LeanIX documentation and enterprise architecture best practices
+- Combined operations leveraging both capabilities
 
 ## Testing Your Integration
 
