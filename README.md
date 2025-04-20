@@ -4,19 +4,22 @@ A Model Context Protocol (MCP) server that connects LeanIX to AI assistants. It 
 
 ## Core Functionality
 
-This integration provides five MCP tools for LeanIX operations:
+This integration provides seven MCP tools for LeanIX operations:
 
 1. **Fact Sheet Overview**: Get counts and statistics of fact sheets in your workspace
 2. **Search**: Find fact sheets by their names
 3. **Subscription Management**: View who is subscribed to specific fact sheets
 4. **Create Fact Sheets**: Add new fact sheets to your workspace
 5. **Update Fact Sheets**: Modify existing fact sheet information
+6. **AI Query Generation**: Generate GraphQL queries from natural language questions
+7. **Query Execution**: Execute dynamically generated GraphQL queries
 
 ## Prerequisites
 
 - Node.js (v14 or higher)
 - A LeanIX workspace and API token
 - Basic understanding of GraphQL and MCP
+- Claude Desktop with MCP support
 
 ## Getting Started
 
@@ -48,12 +51,33 @@ This integration provides five MCP tools for LeanIX operations:
     │       ├── factSheetQueries.js     # Queries for fact sheet operations
     │       └── workspaceQueries.js     # Queries for workspace-level operations
     ├── tools/
-    │   └── workspaceTools.js # Defines and registers the five MCP tools
+    │   └── workspaceTools.js # Defines and registers the MCP tools
     ├── types/
     │   └── schemas.js       # Zod schemas for validating tool parameters
     └── utils/
         └── responseHandler.js # Formats responses in MCP-compatible structure
 ```
+
+## AI-Powered Query Generation
+
+The integration now supports natural language query generation using Claude's AI capabilities. This allows you to:
+
+1. Ask questions in plain English about your LeanIX data
+2. Have Claude automatically generate the appropriate GraphQL query
+3. Execute the query and get results explained in natural language
+
+Example usage:
+```
+You: "What applications do we have in production?"
+
+Claude will:
+1. Analyze your question
+2. Generate a GraphQL query using the LeanIX schema
+3. Execute the query
+4. Present the results in a clear, human-readable format
+```
+
+This feature makes it easier to explore and query your LeanIX data without needing to write GraphQL queries manually.
 
 ## Common Pitfalls and Solutions
 
@@ -94,10 +118,7 @@ Add the following configuration:
 }
 ```
 
-Replace `/path/to/your/lean/server.js` with the absolute path to your server.js file. This tells Claude Desktop to:
-1. Start this MCP server when needed
-2. Connect to it for LeanIX operations
-3. Run it using Node.js
+Replace `/path/to/your/lean/server.js` with the absolute path to your server.js file.
 
 ## Testing Your Integration
 
@@ -108,7 +129,10 @@ Replace `/path/to/your/lean/server.js` with the absolute path to your server.js 
 
 2. The server will connect to your LeanIX workspace and make the tools available through MCP.
 
-3. You can test your tools through any MCP-compatible client (like Claude).
+3. You can test your tools through Claude Desktop:
+   - Try simple queries like "Show me all applications"
+   - Ask complex questions like "Which applications are used by our finance department?"
+   - Get relationship information like "What IT components are connected to Application X?"
 
 ## Debugging Tips
 
@@ -117,6 +141,11 @@ Replace `/path/to/your/lean/server.js` with the absolute path to your server.js 
 2. Use the LeanIX GraphiQL interface to test your queries before implementing them in your tools.
 
 3. Check the server console for detailed error messages when tools fail.
+
+4. When using AI query generation:
+   - Be specific in your questions
+   - Include relevant filters or conditions in your natural language query
+   - Review the generated GraphQL query if results are unexpected
 
 ## Resources
 

@@ -1,4 +1,4 @@
-import { GET_FACT_SHEET_COUNTS } from '../graphql/queries/workspaceQueries.js';
+import { GET_FACT_SHEET_COUNTS, GET_SCHEMA_INFO } from '../graphql/queries/workspaceQueries.js';
 import { SEARCH_FACT_SHEET_BY_NAME } from '../graphql/queries/factSheetQueries.js';
 import { GET_FACT_SHEET_SUBSCRIPTIONS } from '../graphql/queries/subscriptionQueries.js';
 import { CREATE_FACT_SHEET, UPDATE_FACT_SHEET } from '../graphql/queries/factSheetMutations.js';
@@ -78,5 +78,44 @@ export function registerWorkspaceTools(server, leanixClient) {
       });
       return result;
     }, 'updating fact sheet')
+  );
+
+  // Tool to get schema information and generate a query
+  server.tool(
+    'leanix_query_generator',
+    {
+      params: z.object({
+        question: z.string().describe('A natural language question about LeanIX data')
+      })
+    },
+    withErrorHandling(async ({ params }) => {
+      const schemaResponse = await leanixClient.query(GET_SCHEMA_INFO);
+      
+      // Return the schema info in a way that helps Claude understand the available types and fields
+      return {
+        content: [{
+          type: "text",
+          text: `Based on your question: "${params.question}"\n\n` +
+                `I can see these available types and fields in the LeanIX API:\n\n` +
+                `${JSON.stringify(schemaResponse, null, 2)}\n\n` +
+                `I'll help you construct a GraphQL query to get this information.`
+        }]
+      };
+    }, 'retrieving schema information')
+  );
+
+  // Tool to execute the generated query
+  server.tool(
+    'leanix_query_executor',
+    {
+      params: z.object({
+        query: z.string().describe('The GraphQL query to execute'),
+        variables: z.record(z.any()).optional().describe('Any variables required by the query')
+      })
+    },
+    withErrorHandling(async ({ params }) => {
+      const result = await leanixClient.query(params.query, params.variables);
+      return result;
+    }, 'executing GraphQL query')
   );
 } 
