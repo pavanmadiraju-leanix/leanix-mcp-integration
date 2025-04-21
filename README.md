@@ -58,6 +58,43 @@ This integration provides seven MCP tools for LeanIX operations:
         └── responseHandler.js # Formats responses in MCP-compatible structure
 ```
 
+## Architecture
+
+The system architecture is visualized in the following diagram (see `docs/architecture.mmd`):
+
+![Architecture Diagram](docs/architecture.mmd)
+
+The architecture consists of several key components:
+
+1. **Client Side**
+   - Claude Desktop Interface: The main user interface for interacting with the system
+
+2. **MCP Server Layer**
+   - MCP Server: Handles the LeanIX GraphQL operations (v1.0.0)
+   - StdioServerTransport: Manages communication between Claude and the server
+   - Config File: Stores server configuration and credentials
+
+3. **Workspace Tools**
+   - LeanIX Tools (Blue):
+     - getFactSheetCountsByType: Returns counts of all factsheet types
+     - searchFactSheetByName: Searches for factsheets by name
+     - getFactSheetSubscriptions: Gets users subscribed to a factsheet
+     - createFactSheet: Creates a new factsheet
+     - updateFactSheet: Updates a factsheet with patches
+     - leanix_query_generator: Generates GraphQL queries from natural language
+     - leanix_query_executor: Executes GraphQL queries against LeanIX API
+   - Utility Tools (Green):
+     - artifacts: Creates and manages content artifacts
+     - REPL: JavaScript execution environment for analysis
+
+4. **LeanIX Integration**
+   - LeanIX GraphQL Client: Handles API communication
+   - OAuth2 Authentication: Manages authentication flow
+   - API Token: Secures API access
+
+5. **External Systems**
+   - LeanIX API: External endpoints for GraphQL and authentication
+
 ## AI-Powered Query Generation
 
 The integration now supports natural language query generation using Claude's AI capabilities. This allows you to:
