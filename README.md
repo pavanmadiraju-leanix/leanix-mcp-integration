@@ -60,9 +60,77 @@ This integration provides seven MCP tools for LeanIX operations:
 
 ## Architecture
 
-The system architecture is visualized in the following diagram (see `docs/architecture.mmd`):
+The system architecture is visualized in the following diagram:
 
-![Architecture Diagram](docs/architecture.mmd)
+```mermaid
+---
+title: LeanIX MCP Integration Architecture
+---
+flowchart TB
+    subgraph "Client Side"
+        Claude["Claude Desktop Interface"]
+    end
+
+    subgraph "MCP Server Layer"
+        MCP["MCP Server\n(LeanIX GraphQL Server v1.0.0)"]
+        stdio["StdioServerTransport"]
+        config["Config File\n~/Library/Application Support/Claude/\nclaude_desktop_config.json"]
+    end
+
+    subgraph "Workspace Tools"
+        getFactSheetCountsByType["getFactSheetCountsByType()\nReturns counts of all factsheet types"]
+        searchFactSheetByName["searchFactSheetByName()\nSearches for factsheets by name"]
+        getFactSheetSubscriptions["getFactSheetSubscriptions()\nGets users subscribed to a factsheet"]
+        createFactSheet["createFactSheet()\nCreates a new factsheet"]
+        updateFactSheet["updateFactSheet()\nUpdates a factsheet with patches"]
+        leanix_query_generator["leanix_query_generator()\nGenerates GraphQL queries from natural language"]
+        leanix_query_executor["leanix_query_executor()\nExecutes GraphQL queries against LeanIX API"]
+        artifacts["artifacts()\nCreates and manages content artifacts"]
+        repl["REPL / Analysis Tool\nJavaScript execution environment"]
+    end
+
+    subgraph "LeanIX Integration"
+        LeanIXClient["LeanIX GraphQL Client"]
+        OAuth["OAuth2 Authentication"]
+        Token["API Token"]
+    end
+
+    subgraph "External Systems"
+        LeanIXAPI["LeanIX API\n/services/pathfinder/v1/graphql\n/services/mtm/v1/oauth2/token"]
+    end
+
+    Claude <--> stdio
+    stdio <--> MCP
+    MCP --- config
+    
+    MCP --> getFactSheetCountsByType
+    MCP --> searchFactSheetByName
+    MCP --> getFactSheetSubscriptions
+    MCP --> createFactSheet
+    MCP --> updateFactSheet
+    MCP --> leanix_query_generator
+    MCP --> leanix_query_executor
+    MCP --> artifacts
+    MCP --> repl
+
+    getFactSheetCountsByType --> LeanIXClient
+    searchFactSheetByName --> LeanIXClient
+    getFactSheetSubscriptions --> LeanIXClient
+    createFactSheet --> LeanIXClient
+    updateFactSheet --> LeanIXClient
+    leanix_query_generator --> LeanIXClient
+    leanix_query_executor --> LeanIXClient
+
+    LeanIXClient --> OAuth
+    OAuth --> Token
+    LeanIXClient --> LeanIXAPI
+
+    classDef leanixTools fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
+    classDef utilityTools fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px;
+    
+    class getFactSheetCountsByType,searchFactSheetByName,getFactSheetSubscriptions,createFactSheet,updateFactSheet,leanix_query_generator,leanix_query_executor leanixTools;
+    class artifacts,repl utilityTools;
+```
 
 The architecture consists of several key components:
 
