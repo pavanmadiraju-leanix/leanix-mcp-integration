@@ -1,3 +1,4 @@
+```mermaid
 flowchart TB
     subgraph "Client Side"
         Claude["Claude Desktop Interface"]
@@ -57,8 +58,8 @@ flowchart TB
     OAuth --> Token
     LeanIXClient --> LeanIXAPI
 
-    classDef leanixTools fill:#e1f5fe,stroke:#01579b,stroke-width:2px
-    classDef utilityTools fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
+    classDef leanixTools fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
+    classDef utilityTools fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px;
     
-    class getFactSheetCountsByType,searchFactSheetByName,getFactSheetSubscriptions,createFactSheet,updateFactSheet,leanix_query_generator,leanix_query_executor leanixTools
-    class artifacts,repl utilityTools 
+    class getFactSheetCountsByType,searchFactSheetByName,getFactSheetSubscriptions,createFactSheet,updateFactSheet,leanix_query_generator,leanix_query_executor leanixTools;
+    class artifacts,repl utilityTools; 
