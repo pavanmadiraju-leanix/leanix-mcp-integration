@@ -300,9 +300,9 @@ The integration supports:
 
 ## Resources
 
-- [LeanIX API Documentation](https://docs-eam.leanix.net/reference/graphql-api)
+- [LeanIX API Documentation](https://docs-eam.leanix.net/reference/graphql-tutorials)
 - [GraphQL Documentation](https://graphql.org/learn/)
-- [Model Context Protocol Documentation](https://modelcontextprotocol.github.io/)
+- [Model Context Protocol Documentation](https://modelcontextprotocol.io/introduction)
 
 ## License
 
