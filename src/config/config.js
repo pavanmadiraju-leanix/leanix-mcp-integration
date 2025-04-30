@@ -11,16 +11,14 @@ dotenv.config({ path: join(dirname(dirname(__dirname)), '.env') });
 // Debug logging
 console.error('Environment variables loaded:');
 console.error('LEANIX_SUBDOMAIN:', process.env.LEANIX_SUBDOMAIN);
-console.error('LEANIX_TOKEN:', process.env.LEANIX_TOKEN ? '[PRESENT]' : '[MISSING]');
 
 // Configuration parameters
 export const config = {
-  subdomain: process.env.LEANIX_SUBDOMAIN,
-  token: process.env.LEANIX_TOKEN
+  subdomain: process.env.LEANIX_SUBDOMAIN
 };
 
 // Validate configuration
-if (!config.subdomain || !config.token) {
-  console.error('Error: LEANIX_SUBDOMAIN and LEANIX_TOKEN environment variables must be set');
+if (!config.subdomain) {
+  console.error('Error: LEANIX_SUBDOMAIN environment variables must be set');
   process.exit(1);
 }

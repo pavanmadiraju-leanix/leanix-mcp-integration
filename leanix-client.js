@@ -1,21 +1,20 @@
 import { GraphQLClient } from 'graphql-request';
 
 export class LeanIXClient {
-  constructor(subdomain, apiToken) {
-    if (!subdomain || !apiToken) {
-      throw new Error('Both subdomain and apiToken are required');
+  constructor(subdomain) {
+    if (!subdomain) {
+      throw new Error('Subdomain is required');
     }
 
     this.subdomain = subdomain;
     this.baseUrl = `https://${subdomain}.leanix.net`;
     this.graphqlEndpoint = `${this.baseUrl}/services/pathfinder/v1/graphql`;
     this.tokenEndpoint = `${this.baseUrl}/services/mtm/v1/oauth2/token`;
-    this.apiToken = apiToken;
   }
 
-  async getAccessToken() {
-    const basicAuth = Buffer.from(`apitoken:${this.apiToken}`).toString('base64');
-    
+  async getAccessToken(apiToken) {
+    const basicAuth = Buffer.from(`apitoken:${apiToken}`).toString('base64');
+
     const response = await fetch(this.tokenEndpoint, {
       method: 'POST',
       headers: {
@@ -31,10 +30,11 @@ export class LeanIXClient {
 
     const data = await response.json();
     return data.access_token;
-  }
+  }  
 
-  async query(query, variables = {}) {
-    const accessToken = await this.getAccessToken();
+  async query(query, apiToken, variables = {}) {
+    const accessToken = await this.getAccessToken(apiToken);
+
     this.client = new GraphQLClient(this.graphqlEndpoint, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,

@@ -13,8 +13,9 @@ export function registerWorkspaceTools(server, leanixClient) {
   server.tool(
     'getFactSheetCountsByType',
     {},
-    withErrorHandling(async () => {
-      const result = await leanixClient.query(GET_FACT_SHEET_COUNTS);
+    withErrorHandling(async ({ params }, ctx) => {
+      const bearer = ctx.authInfo.token;
+      const result = await leanixClient.query(GET_FACT_SHEET_COUNTS, bearer);
       return result;
     }, 'fetching fact sheet counts and workspace overview')
   );
@@ -27,9 +28,10 @@ export function registerWorkspaceTools(server, leanixClient) {
         name: z.string().describe('Name of the fact sheet to search for')
       })
     },
-    withErrorHandling(async ({ params }) => {
+    withErrorHandling(async ({ params }, ctx) => {
+      const bearer = ctx.authInfo.token;
       // Extract name from params and pass it directly in variables
-      const result = await leanixClient.query(SEARCH_FACT_SHEET_BY_NAME, { name: params.name });
+      const result = await leanixClient.query(SEARCH_FACT_SHEET_BY_NAME, bearer, { name: params.name });
       return result;
     }, 'searching fact sheet by name')
   );
@@ -42,8 +44,9 @@ export function registerWorkspaceTools(server, leanixClient) {
         factSheetId: z.string().describe('ID of the fact sheet to get subscriptions for')
       })
     },
-    withErrorHandling(async ({ params }) => {
-      const result = await leanixClient.query(GET_FACT_SHEET_SUBSCRIPTIONS, { factSheetId: params.factSheetId });
+    withErrorHandling(async ({ params }, ctx) => {
+      const bearer = ctx.authInfo.token;
+      const result = await leanixClient.query(GET_FACT_SHEET_SUBSCRIPTIONS, bearer, { factSheetId: params.factSheetId });
       return result;
     }, 'fetching subscriptions for a fact sheet')
   );
@@ -56,8 +59,9 @@ export function registerWorkspaceTools(server, leanixClient) {
         input: factSheetInputSchema
       })
     },
-    withErrorHandling(async ({ params }) => {
-      const result = await leanixClient.query(CREATE_FACT_SHEET, { input: params.input });
+    withErrorHandling(async ({ params }, ctx) => {
+      const bearer = ctx.authInfo.token;
+      const result = await leanixClient.query(CREATE_FACT_SHEET, bearer, { input: params.input });
       return result;
     }, 'creating new fact sheet')
   );
@@ -71,8 +75,9 @@ export function registerWorkspaceTools(server, leanixClient) {
         patches: factSheetPatchSchema
       })
     },
-    withErrorHandling(async ({ params }) => {
-      const result = await leanixClient.query(UPDATE_FACT_SHEET, { 
+    withErrorHandling(async ({ params }, ctx) => {
+      const bearer = ctx.authInfo.token;
+      const result = await leanixClient.query(UPDATE_FACT_SHEET, bearer, { 
         id: params.id,
         patches: params.patches
       });
